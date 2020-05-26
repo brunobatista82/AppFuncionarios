@@ -4,9 +4,9 @@ public class funcionarios {
 
     private int id;
     private String cargo, atividades;
-    private Double salario;
+    private double salario;
 
-    public funcionarios(int id, String cargo, String atividades, String salario) {
+    public funcionarios(int id, String cargo, String atividades, double salario) {
         this.id = id;
         this.cargo = cargo;
         this.atividades = atividades;
@@ -16,5 +16,5 @@ public class funcionarios {
     public int getId() {return id;}
     public String getCargo() {return cargo;}
     public String getAtividades() {return atividades;}
-    public int getSalario() {return salario;}
+    public double getSalario() {return salario;}
 }

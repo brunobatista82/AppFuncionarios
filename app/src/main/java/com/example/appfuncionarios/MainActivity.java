@@ -32,10 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int CODE_GET_REQUEST = 1024;
     private static final int CODE_POST_REQUEST = 1025;
 
-    EditText editFuncionarioId, editCargo, editSalario;
+    EditText editFuncionarioId, editCargo, editSalario, editAtividades;
     Button buttonAddUpdate;
     ListView listView;
-    ProgressBar progressBar;
 
     List<funcionarios> funcionariosList;
 
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         editFuncionarioId = findViewById(R.id.editFuncionarioId);
         editCargo = findViewById(R.id.editCargo);
         editSalario = findViewById(R.id.editSalario);
+        editAtividades = findViewById(R.id.editAtividades);
 
         buttonAddUpdate = findViewById(R.id.buttonAddUpdate);
         listView = findViewById(R.id.listViewFuncionarios);
@@ -78,14 +78,20 @@ public class MainActivity extends AppCompatActivity {
         String id = editFuncionarioId.getText().toString();
         String cargo = editCargo.getText().toString();
         String salario = editSalario.getText().toString();
+        String atividades = editAtividades.getText().toString();
 
         if (TextUtils.isEmpty(cargo)) {
             editCargo.setError("Por favor, insira o cargo");
             editCargo.requestFocus();
             return;
         }
-        if (TextUtils.isEmpty(salario.toString())) {
+        if (TextUtils.isEmpty(salario)) {
             editCargo.setError("Por favor, insira o salario");
+            editCargo.requestFocus();
+            return;
+        }
+        if (TextUtils.isEmpty(atividades)) {
+            editCargo.setError("Por favor, insira as atividades");
             editCargo.requestFocus();
             return;
         }
@@ -95,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         params.put("cargo", cargo);
         params.put("salario", String.valueOf(salario));
 
-        PerformNetworkRequest request = new PerformNetworkRequest(API.URL_UPDATE_FUNCIONARIO, params, CODE_POST_REQUEST);
+        PerformNetworkRequest request = new PerformNetworkRequest(API.URL_UPDATE_FUNCIONARIO + id, params, CODE_POST_REQUEST);
         request.execute();
 
         buttonAddUpdate.setText("Add");
@@ -109,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     private void createFuncionario() {
         String cargo = editCargo.getText().toString().trim();
         Double salario = Double.valueOf(editSalario.getText().toString().trim());
+        String atividades = editAtividades.getText().toString().trim();
 
         if (TextUtils.isEmpty(cargo)) {
             editCargo.setError("Por favor, insira o cargo");
@@ -123,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
         HashMap<String, String> params = new HashMap<>();
         params.put("cargo", cargo);
+        params.put("atividades", atividades);
         params.put("salario", String.valueOf(salario));
 
         PerformNetworkRequest request = new PerformNetworkRequest(API.URL_CREATE_FUNCIONARIO, params, CODE_POST_REQUEST);
@@ -133,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         PerformNetworkRequest request = new PerformNetworkRequest(API.URL_DELETE_FUNCIONARIO + id, null, CODE_GET_REQUEST);
         request.execute();
     }
-    private void refreshHeroList(JSONArray funcionario) throws JSONException {
+    private void refreshFuncionarioList(JSONArray funcionario) throws JSONException {
         funcionariosList.clear();
 
         for (int i = 0; i < funcionario.length(); i++) {
@@ -143,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     obj.getInt("id"),
                     obj.getString("cargo"),
                     obj.getString("atividades"),
-                    obj.getString(String.valueOf("salario"))
+                    obj.getDouble("salario")
             ));
         }
 
@@ -161,26 +169,21 @@ public class MainActivity extends AppCompatActivity {
             this.params = params;
             this.requestCode = requestCode;
         }
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
-        }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            progressBar.setVisibility(GONE);
             try {
                 JSONObject object = new JSONObject(s);
                 if (!object.getBoolean("error")) {
                     Toast.makeText(getApplicationContext(), object.getString("message"), Toast.LENGTH_SHORT).show();
-                    refreshHeroList(object.getJSONArray("heroes"));
+                    refreshFuncionarioList((object.getJSONArray("funcionario")));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
 
         @Override
         protected String doInBackground(Void... voids) {
@@ -225,7 +228,8 @@ public class MainActivity extends AppCompatActivity {
                     isUpdating = true;
                     editFuncionarioId.setText(String.valueOf(funcionarios.getId()));
                     editCargo.setText(funcionarios.getCargo());
-                    editSalario.setText(funcionarios.getSalario());
+                    editSalario.setText(String.valueOf(funcionarios.getSalario()));
+                    editAtividades.setText(funcionarios.getAtividades());
                     buttonAddUpdate.setText("Update");
                 }
             });

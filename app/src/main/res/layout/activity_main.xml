@@ -21,17 +21,25 @@
             android:id="@+id/editCargo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:hint="Cargo" />
 
         <EditText
             android:id="@+id/editSalario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:hint="Salário" />
+
+        <EditText
+            android:id="@+id/editAtividades"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:hint="Atividades" />
 
         <Button
             android:id="@+id/buttonAddUpdate"
