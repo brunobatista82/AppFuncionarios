@@ -25,7 +25,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
-import static android.view.View.GONE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     EditText editFuncionarioId, editCargo, editSalario, editAtividades;
     Button buttonAddUpdate;
     ListView listView;
+    ProgressBar progressBar;
 
     List<funcionarios> funcionariosList;
 
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         editCargo = findViewById(R.id.editCargo);
         editSalario = findViewById(R.id.editSalario);
         editAtividades = findViewById(R.id.editAtividades);
+        progressBar = findViewById(R.id.progressBar);
 
         buttonAddUpdate = findViewById(R.id.buttonAddUpdate);
         listView = findViewById(R.id.listViewFuncionarios);
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, String> params = new HashMap<>();
         params.put("id", id);
         params.put("cargo", cargo);
-        params.put("salario", String.valueOf(salario));
+        params.put("salario",salario);
 
         PerformNetworkRequest request = new PerformNetworkRequest(API.URL_UPDATE_FUNCIONARIO + id, params, CODE_POST_REQUEST);
         request.execute();
@@ -141,11 +142,11 @@ public class MainActivity extends AppCompatActivity {
         PerformNetworkRequest request = new PerformNetworkRequest(API.URL_DELETE_FUNCIONARIO + id, null, CODE_GET_REQUEST);
         request.execute();
     }
-    private void refreshFuncionarioList(JSONArray funcionario) throws JSONException {
+    private void refreshFuncionarioList(JSONArray funcionarios) throws JSONException {
         funcionariosList.clear();
 
-        for (int i = 0; i < funcionario.length(); i++) {
-            JSONObject obj = funcionario.getJSONObject(i);
+        for (int i = 0; i < funcionarios.length(); i++) {
+            JSONObject obj = funcionarios.getJSONObject(i);
 
             funcionariosList.add(new funcionarios(
                     obj.getInt("id"),
@@ -171,13 +172,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try {
                 JSONObject object = new JSONObject(s);
                 if (!object.getBoolean("error")) {
                     Toast.makeText(getApplicationContext(), object.getString("message"), Toast.LENGTH_SHORT).show();
-                    refreshFuncionarioList((object.getJSONArray("funcionario")));
+                    refreshFuncionarioList((object.getJSONArray("funcionarios")));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -203,15 +210,16 @@ public class MainActivity extends AppCompatActivity {
     class FuncionarioAdapter extends ArrayAdapter<funcionarios> {
         List<funcionarios> funcionariosList;
 
-        public FuncionarioAdapter(List<funcionarios> heroList) {
-            super(MainActivity.this, R.layout.funcionario_list, MainActivity.this.funcionariosList);
+        public FuncionarioAdapter(List<funcionarios> funcionariosList) {
+            super(MainActivity.this, R.layout.activity_main,funcionariosList);
+            this.funcionariosList = funcionariosList;
         }
 
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
-            View listViewItem = inflater.inflate(R.layout.funcionario_list, null, true);
+            View listViewItem = inflater.inflate(R.layout.activity_main, null, true);
 
             TextView textViewCargo = listViewItem.findViewById(R.id.textViewCargo);
 
