@@ -11,18 +11,18 @@ class DbOperation
          $this->con = $db->connect();
     }
 	
-	function createFuncionario($placa, $cor, $descricao, $ano){
-		$stmt = $this->con->prepare("INSERT INTO tbFuncionarios (cargo, atividades, salario, foto) VALUES (?, ?, ?, ?)");
-		$stmt->bind_param("sssi", $cargo, $atividades, $salario, $foto);
+	function createFuncionario($cargo, $atividades, $salario){
+		$stmt = $this->con->prepare("INSERT INTO tbFuncionarios (cargo, atividades, salario) VALUES (?, ?, ?)");
+		$stmt->bind_param("sssi", $cargo, $atividades, $salario);
 		if($stmt->execute())
 			return true; 
 		return false; 
 	}
 
 	function getFuncionario(){
-		$stmt = $this->con->prepare("SELECT id, cargo, atividades, salario, foto FROM tbFuncionarios");
+		$stmt = $this->con->prepare("SELECT * FROM tbFuncionarios");
 		$stmt->execute();
-		$stmt->bind_result($id, $placa, $cor, $descricao, $ano);
+		$stmt->bind_result($id, $cargo, $atividades, $salario);
 		$Funcionarios = array(); 
 	
 		while($stmt->fetch()){
@@ -31,7 +31,6 @@ class DbOperation
 			$Funcionario['cargo'] = $cargo; 
 			$Funcionario['atividades'] = $atividades; 
 			$Funcionario['salario'] = $salario; 
-			$Funcionario['foto'] = $foto; 
 			
 			array_push($Funcionarios, $Funcionario); 
 		}
@@ -39,9 +38,9 @@ class DbOperation
 		return $Funcionarios; 
 	}
 	
-	function updateFuncionario($id, $cargo, $atividades, $salario, $foto){
-		$stmt = $this->con->prepare("UPDATE tbFuncionarios SET cargo = ?, atividades = ?, salario = ?, foto = ? WHERE id = ?");
-		$stmt->bind_param("sssii", $cargo, $atividades, $salario, $foto, $id);
+	function updateFuncionario($id, $cargo, $atividades, $salario){
+		$stmt = $this->con->prepare("UPDATE tbFuncionarios SET cargo = ?, atividades = ?, salario = ? WHERE id = ?");
+		$stmt->bind_param("sssii", $cargo, $atividades, $salario, $id);
 		if($stmt->execute())
 			return true; 
 		return false; 
