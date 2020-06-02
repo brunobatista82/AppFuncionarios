@@ -38,15 +38,14 @@
 	
 			case 'createFuncionarios':
 				
-				isTheseParametersAvailable(array('cargo','atividades','salario','foto'));
+				isTheseParametersAvailable(array('cargo','atividades','salario'));
 				
 				$db = new DbOperation();
 				
 				$result = $db->createFuncionarios(
 					$_POST['cargo'],
 					$_POST['atividades'],
-					$_POST['salario'],
-					$_POST['foto']
+					$_POST['salario']
 				);
 				
 
@@ -59,7 +58,7 @@
 					$response['message'] = 'Funcionario adicionado com sucesso';
 
 					
-					$response['Funcionarios'] = $db->getFuncionarios();
+					$response['Funcionarios'] = $db->getFuncionario();
 				}else{
 
 					
@@ -72,30 +71,29 @@
 			break; 
 			
 		
-			case 'getFuncionarios':
+			case 'getFuncionario':
 				$db = new DbOperation();
 				$response['error'] = false; 
 				$response['message'] = 'Funcionario selecionado com sucesso!!!';
-				$response['Funcionarios'] = $db->getFuncionarios();
+				$response['Funcionarios'] = $db->getFuncionario();
 			break; 
 			
 			
 		
 			case 'updateFuncionario':
-				isTheseParametersAvailable(array('id','cargo','atividades','salario','foto'));
+				isTheseParametersAvailable(array('id','cargo','atividades','salario'));
 				$db = new DbOperation();
 				$result = $db->updateFuncionario(
 					$_POST['id'],
 					$_POST['cargo'],
 					$_POST['atividades'],
-					$_POST['salario'],
-					$_POST['foto']
+					$_POST['salario']
 				);
 				
 				if($result){
 					$response['error'] = false; 
 					$response['message'] = 'Funcionario alterado com sucesso';
-					$response['Funcionarios'] = $db->getFuncionarios();
+					$response['Funcionarios'] = $db->getFuncionario();
 				}else{
 					$response['error'] = true; 
 					$response['message'] = 'Erro ao alterar!!!';
@@ -108,10 +106,10 @@
 				
 				if(isset($_GET['id'])){
 					$db = new DbOperation();
-					if($db->deleteCarro($_GET['id'])){
+					if($db->deleteFuncionario($_GET['id'])){
 						$response['error'] = false; 
 						$response['message'] = 'Funcionarios excluído com sucesso';
-						$response['Funcionarios'] = $db->getFuncionarios();
+						$response['Funcionarios'] = $db->getFuncionario();
 					}else{
 						$response['error'] = true; 
 						$response['message'] = 'Erro ao excluir!!!';
