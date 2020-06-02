@@ -69,6 +69,31 @@ public class MainActivity extends AppCompatActivity {
         readFuncionario();
     }
 
+    private void createFuncionario() {
+        String cargo = editCargo.getText().toString().trim();
+        Double salario = Double.valueOf(editSalario.getText().toString().trim());
+        String atividades = editAtividades.getText().toString().trim();
+
+        if (TextUtils.isEmpty(cargo)) {
+            editCargo.setError("Por favor, insira o cargo");
+            editCargo.requestFocus();
+            return;
+        }
+        if (TextUtils.isEmpty(salario.toString())) {
+            editCargo.setError("Por favor, insira o salario");
+            editCargo.requestFocus();
+            return;
+        }
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("cargo", cargo);
+        params.put("atividades", atividades);
+        params.put("salario", String.valueOf(salario));
+
+        PerformNetworkRequest request = new PerformNetworkRequest(API.URL_CREATE_FUNCIONARIO, params, CODE_POST_REQUEST);
+        request.execute();
+    }
+
     private void readFuncionario() {
         PerformNetworkRequest request = new PerformNetworkRequest(API.URL_READ_FUNCIONARIO, null, CODE_GET_REQUEST);
         request.execute();
@@ -113,31 +138,6 @@ public class MainActivity extends AppCompatActivity {
         isUpdating = false;
     }
 
-    private void createFuncionario() {
-        String cargo = editCargo.getText().toString().trim();
-        Double salario = Double.valueOf(editSalario.getText().toString().trim());
-        String atividades = editAtividades.getText().toString().trim();
-
-        if (TextUtils.isEmpty(cargo)) {
-            editCargo.setError("Por favor, insira o cargo");
-            editCargo.requestFocus();
-            return;
-        }
-        if (TextUtils.isEmpty(salario.toString())) {
-            editCargo.setError("Por favor, insira o salario");
-            editCargo.requestFocus();
-            return;
-        }
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("cargo", cargo);
-        params.put("atividades", atividades);
-        params.put("salario", String.valueOf(salario));
-
-        PerformNetworkRequest request = new PerformNetworkRequest(API.URL_CREATE_FUNCIONARIO, params, CODE_POST_REQUEST);
-        request.execute();
-    }
-
     private void deleteFuncionario(int id){
         PerformNetworkRequest request = new PerformNetworkRequest(API.URL_DELETE_FUNCIONARIO + id, null, CODE_GET_REQUEST);
         request.execute();
@@ -159,8 +159,8 @@ public class MainActivity extends AppCompatActivity {
         FuncionarioAdapter adapter = new FuncionarioAdapter(funcionariosList);
         listView.setAdapter(adapter);
     }
-
     private class PerformNetworkRequest extends AsyncTask<Void, Void, String> {
+
         String url;
         HashMap<String, String> params;
         int requestCode;
