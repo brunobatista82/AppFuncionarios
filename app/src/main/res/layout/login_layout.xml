@@ -3,48 +3,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/func"
     android:orientation="vertical"
     tools:context=".Login_activity">
 
+
     <LinearLayout
-        android:layout_margin="30dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="30dp"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Usuário" />
+            android:text="Usuário"
+            android:textColor="#1F1FFF"
+            android:textSize="20dp"/>
 
         <EditText
+            android:id="@+id/Usuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:id="@+id/Usuario"/>
+            android:inputType="textPersonName" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Senha" />
+            android:text="Senha"
+            android:textColor="#1F1FFF"
+            android:textSize="20dp"/>
 
         <EditText
+            android:id="@+id/Senha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:id="@+id/Senha"/>
+            android:inputType="textPassword" />
 
-
-        <Button
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Entrar"
-            android:id="@+id/Entrar"/>
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sair"
-            android:id="@+id/Sair"/>
+            <Button
+                android:id="@+id/Entrar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/caixa_texto"
+                android:text="Entrar"
+                android:textAllCaps="false"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/Sair"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/caixa_texto"
+                android:text="Sair"
+                android:textAllCaps="false"
+                android:textSize="20dp" />
+
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
